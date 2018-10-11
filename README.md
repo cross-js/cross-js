@@ -245,7 +245,7 @@ const { Headers, Response, Request } = fetch // browser exclude
 const URL = require('whatwg-url')
 const URLSearchParams = require('url-search-params')
 const querystring = require('querystring')
-const url } = require('url').Url
+const url = require('url').Url
 const parsed = url.parse(source)
 const obj = querystring.parse('a=a&abc=x&abc=y') // { a: 'a', abc: ['x', 'y'] }
 
