@@ -233,24 +233,28 @@ const { Headers, Response, Request } = fetch // browser exclude
 ```
 
 
-## Don't use node's [url](https://nodejs.org/api/url.html#url_legacy_url_api)
+## Don't use node's [Url](https://nodejs.org/api/url.html#url_legacy_url_api) or [querystring](https://nodejs.org/api/querystring.html)
 #### Why?
-The [WHATWG URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) Standard uses a more selective and fine grained approach to selecting encoded characters than that used by the Legacy API.<br>
-WHATWG URL is avalible in both context
+- The [WHATWG URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) Standard uses a more selective and fine grained approach to selecting encoded characters than that used by the Legacy API.
+- WHATWG URL and URLSearchParams is avalible in both context
+- querystring will mix the value between string and arrays giving you a inconsistent api
 #### How then?
 
 ```js
 // ✗ avoid
-const URL = require('whatwg-url') // it's fine if you need to polyfill
-const URLSearchParams = require('url-search-params') // (whatwg-url have this built in)
+const URL = require('whatwg-url')
+const URLSearchParams = require('url-search-params')
+const querystring = require('querystring')
+const { Url } = require('url')
 const parsed = url.parse(source)
+const obj = querystring.parse('a=a&abc=x&abc=y') // { a: 'a', abc: ['x', 'y'] }
 
 // ✓ ok
-const { URL, URLSearchParams } = require('util') // browser exclude
+const { URL, URLSearchParams } = require('url') // browser exclude
 
 // in Node v10.0.0 this is available on the global scope
 const parsed = new URL(source)
-const params = new URLSearchParams(source) 
+const params = new URLSearchParams(source)
 ```
 
 ## Don't use node's [string_decoder](https://nodejs.org/api/string_decoder.html)
