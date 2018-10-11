@@ -19,16 +19,16 @@ If you follow this rule you might be able to write code with just a fraction of 
 
 
 # CrossJS — The Rules
-- [Don't use Buffer](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-buffer)
-- [Don't use EventEmitter or EventTarget](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-eventemitter-or-eventtarget)
-- [Don't create Node or Web readable Stream yourself](https://github.com/corss-js/corss-js/blob/master/README.md#dont-create-node-or-web-readable-stream-yourself)
-- [Don't use any ajax/request library](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-any-ajaxrequest-library)
-- [Don't use node's url](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-nodes-url)
-- [Don't use node's string_decoder](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-nodes-string_decoder)
-- [Don't use inherits](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-inherits)
-- [Don't use if-else platform specific code inside functions](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-if-else-platform-specific-inside-functions)
-- [Don't depend of things that would make your application crash in another context](https://github.com/corss-js/corss-js/blob/master/README.md#dont-depend-of-things-that-would-make-your-application-crash-in-another-context)
-- [Don't use anything else then javascript](https://github.com/corss-js/corss-js/blob/master/README.md#dont-use-anything-else-then-javascript)
+- [Don't use Buffer](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-buffer)
+- [Don't use EventEmitter or EventTarget](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-eventemitter-or-eventtarget)
+- [Don't create Node or Web readable Stream yourself](https://github.com/cross-js/cross-js/blob/master/README.md#dont-create-node-or-web-readable-stream-yourself)
+- [Don't use any ajax/request library](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-any-ajaxrequest-library)
+- [Don't use node's url](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-nodes-url)
+- [Don't use node's string_decoder](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-nodes-string_decoder)
+- [Don't use inherits](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-inherits)
+- [Don't use if-else platform specific code inside functions](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-if-else-platform-specific-inside-functions)
+- [Don't depend of things that would make your application crash in another context](https://github.com/cross-js/cross-js/blob/master/README.md#dont-depend-of-things-that-would-make-your-application-crash-in-another-context)
+- [Don't use anything else then javascript](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-anything-else-then-javascript)
 
 ## Don't use Buffer
 #### Why?
@@ -381,6 +381,6 @@ It's not fun to transpile your existing ts/flow back to js when it lands. so use
 Yes! but I have not made one myself, since so many love to use https://shields.io in there readme's you could include this to let people know that your code is using CrossJS style.
 
 ```
-[![Cross js compatible](https://img.shields.io/badge/Cross--js-Compatible-brightgreen.svg)](https://github.com/corss-js/corss-js)
+[![Cross js compatible](https://img.shields.io/badge/Cross--js-Compatible-brightgreen.svg)](https://github.com/cross-js/cross-js)
 ```
-[![CrossJS compatible](https://img.shields.io/badge/Cross--js-Compatible-brightgreen.svg)](https://github.com/corss-js/corss-js)
+[![CrossJS compatible](https://img.shields.io/badge/Cross--js-Compatible-brightgreen.svg)](https://github.com/cross-js/cross-js)
