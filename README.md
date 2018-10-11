@@ -153,7 +153,7 @@ new ReadableStream({...})
 new stream.Readable({...})
 
 // ✓ ok (create a async iterator that reads a large file/blob in chunks)
-async function* blobToIterator(blob, chunkSize = 524288) {
+async function* blobToIterator(blob, chunkSize = 8 << 16) { // 0.5 MiB
   const fr = new FileReader()
   let position = 0
 
