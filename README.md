@@ -23,7 +23,7 @@ If you follow this rule you might be able to write code with just a fraction of 
 - [Don't use EventEmitter or EventTarget](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-eventemitter-or-eventtarget)
 - [Don't create Node or Web readable Stream yourself](https://github.com/cross-js/cross-js/blob/master/README.md#dont-create-node-or-web-readable-stream-yourself)
 - [Don't use any ajax/request library](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-any-ajaxrequest-library)
-- [Don't use node's url](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-nodes-url)
+- [Don't use node's Url or querystring](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-nodes-url-or-querystring)
 - [Don't use node's string_decoder](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-nodes-string_decoder)
 - [Don't use inherits](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-inherits)
 - [Don't use if-else platform specific code inside functions](https://github.com/cross-js/cross-js/blob/master/README.md#dont-use-if-else-platform-specific-inside-functions)
@@ -245,7 +245,7 @@ const { Headers, Response, Request } = fetch // browser exclude
 const URL = require('whatwg-url')
 const URLSearchParams = require('url-search-params')
 const querystring = require('querystring')
-const { Url } = require('url')
+const url } = require('url').Url
 const parsed = url.parse(source)
 const obj = querystring.parse('a=a&abc=x&abc=y') // { a: 'a', abc: ['x', 'y'] }
 
