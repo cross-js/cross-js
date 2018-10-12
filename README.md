@@ -36,6 +36,8 @@ Uint8Array and Buffer have very much in common and are very similar to each othe
 Adding buffer will increase your bundle size a lot. And the fact that buffer inherits from
 `Uint8Array` have made recent Node.js core api's acceptabel to typed arrays. For example: `fs.writeFile()` used to only accept a Buffer but now works with both typed arrays and buffers.
 
+This don't mean you have to convert all buffers you recive from node's core api and other modules from buffer to uint8array, just treat the buffer as a Uint8array instead since buffer inherits from it.
+
 #### How then?
 use [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) and [DataView](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView)
 ```js
@@ -43,6 +45,7 @@ use [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Referen
 var chunk = Buffer.from(source)
 var chunk = Buffer.alloc(n)
 var chunk = Buffer.allocUnsafe(n)
+var chunk = new Buffer(source)
 
 // ✓ ok 
 // Buffer allocation
