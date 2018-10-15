@@ -32,8 +32,8 @@ If you follow this rule you might be able to write code with just a fraction of 
 
 ## Don't use Buffer
 #### Why?
-Uint8Array and Buffer have very much in common and are very similar to each other.
-Adding buffer will increase your bundle size a lot. And the fact that buffer inherits from
+`Uint8Array` and `Buffer` have very much in common and are very similar to each other.
+Adding `buffer` will increase your bundle size a lot. And the fact that buffer inherits from
 `Uint8Array` have made recent Node.js core api's acceptabel to typed arrays. For example: `fs.writeFile()` used to only accept a Buffer but now works with both typed arrays and buffers.
 
 This don't mean you have to convert all buffers you recive from node's core api and other modules from buffer to uint8array, just treat the buffer as a Uint8array instead since buffer inherits from it.
