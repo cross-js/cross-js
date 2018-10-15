@@ -360,8 +360,12 @@ module.exports = { captureFrame, rotateFrame }
 ## Don't use anything else then javascript
 ...such as TypeScript or CoffeeScript that isn't able to run on any platform without beeing transpiled to javascript first
 #### Why?
-The point is that: It should just work without any transpilation<br>
-People should be able to include a part of your module without having to require the entire bundle or having to compile it themself
+The point is that: 
+- It should just work without any transpilation
+- Transpilers just adds an additional building step and building time
+- Your module will be larger/more complex.
+- You are allways going stay in the shadow of JavaScript and always have to wait for other transpilers to start supporting new syntax before you can use it.
+- People should be able to include a part of your module without having to require the entire bundle or having to compile it themself
 ```js
 import x from 'module/foo'
 ```
@@ -382,7 +386,7 @@ function captureFrame (video) {...}
 using jsDoc you would be able to take full advantage of closure-compiler advanced optimizations also
 
 Hold your horsers and wait until Static Typing becomes a real thing: https://github.com/sirisian/ecmascript-types
-It's not fun to transpile your existing ts/flow back to js when it lands. so use jsDoc & d.ts for now.
+It's not fun to transpile your existing ts/flow back to js when it lands. so use jsDoc & `d.ts` for now.
 
 # Is there a readme badge?
 Yes! but I have not made one myself, since so many love to use https://shields.io in there readme's you could include this to let people know that your code is using CrossJS style.
