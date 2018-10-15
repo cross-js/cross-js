@@ -2,7 +2,7 @@
 Adopting CrossJS style means your javascript can work in any enviorment without being dependent on any core browser/node js api and can work in any context just as it's without increassing the bundled size to much. This might not make sense for 100% of projects and development cultures. This rules certenly don't apply if you are only targeting one platform that has the api built in. 
 
 # For References 
-By only including [readable-stream](https://www.npmjs.com/package/readable-stream) for browser without anything else you have  included the buffer, events string_decoder and inherits module among many more smaller modules and already broken 4 of this rules and increased your bundle to: 
+By only including [readable-stream](https://www.npmjs.com/package/readable-stream) for browser without anything else you have  included the buffer, events, string_decoder and inherits module among many more smaller modules and already broken 4 of this rules and increased your bundle to: 
 
 
 |                | gzip    | uncompressed |
