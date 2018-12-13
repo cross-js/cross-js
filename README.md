@@ -29,6 +29,7 @@ If you follow this rule you might be able to write code with just a fraction of 
 - [Don't use if-else platform specific code inside functions](https://github.com/cross-js/cross-js#dont-use-if-else-platform-specific-inside-functions)
 - [Don't depend of things that would make your application crash in another context](https://github.com/cross-js/cross-js#dont-depend-of-things-that-would-make-your-application-crash-in-another-context)
 - [Don't use anything else then javascript](https://github.com/cross-js/cross-js#dont-use-anything-else-then-javascript)
+- [Don't use cancable promise](https://github.com/cross-js/cross-js#dont-use-cancable-promise)
 
 ## Don't use Buffer
 #### Why?
@@ -387,6 +388,26 @@ using jsDoc you would be able to take full advantage of closure-compiler advance
 
 Hold your horsers and wait until Static Typing becomes a real thing: https://github.com/sirisian/ecmascript-types
 It's not fun to transpile your existing ts/flow back to js when it lands. so use jsDoc & `d.ts` for now.
+
+
+## Don't use cancable promises
+#### Why?
+There is a standard avalible and it's called [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) it was initially built for aborting a fetch request but they can be used for other things as well. there is polyfill avalible and you can remove it once it becomes available later on (easier to refactor)
+
+#### How then?
+```js
+// ✗ avoid
+import * from 'p-cancelable'
+import * from 'p-timeout'
+import * from 'promise-cancelable'
+
+// ✓ ok
+const controller = new AbortController();
+const signal = controller.signal;
+fetch(url, {signal})
+// Later
+controller.abort();
+```
 
 # Is there a readme badge?
 Yes! but I have not made one myself, since so many love to use https://shields.io in there readme's you could include this to let people know that your code is using CrossJS style.
