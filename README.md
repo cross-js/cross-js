@@ -31,7 +31,7 @@ If you follow this rule you might be able to write code with just a fraction of 
 - [Don't use if-else platform specific code inside functions](https://github.com/cross-js/cross-js#dont-use-if-else-platform-specific-inside-functions)
 - [Don't depend of things that would make your application crash in another context](https://github.com/cross-js/cross-js#dont-depend-of-things-that-would-make-your-application-crash-in-another-context)
 - [Don't use anything else then javascript](https://github.com/cross-js/cross-js#dont-use-anything-else-then-javascript)
-- [Don't use cancable promise](https://github.com/cross-js/cross-js#dont-use-cancable-promises)
+- [Don't use cancelable promises](https://github.com/cross-js/cross-js#dont-use-cancelable-promises)
 
 ## Don't use Buffer
 
