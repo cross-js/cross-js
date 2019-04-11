@@ -396,28 +396,32 @@ module.exports = { captureFrame, rotateFrame }
 
 ### Don't use anything else then javascript
 
-...such as TypeScript or CoffeeScript that isn't able to run on any platform without beeing transpiled to javascript first
+...such as PureScript, TypeScript, LiveScript or CoffeeScript that isn't able to run on any platform without beeing transpiled to javascript first
 
 #### Why?
 
 The point is that:
 
 - It should just work without any transpilation
-- Transpilers just adds an additional building step and building time
-- Your module will be larger/more complex.
+- Transpilers just adds an additional building step, building time and the output is sometimes much larger
+- Your project will be more complex.
 - You are always going stay in the shadow of JavaScript and always have to wait for other transpilers to start supporting new syntax before you can use it.
 - People should be able to include a part of your module without having to require the entire bundle or having to compile it themselves
+- You need to educate developers to properly use other language other then what was built for the platform, while at the same time you need to know a bit of javascript to know what is going on
 
 ```js
 import x from 'module/foo'
 ```
 
-It should feel less like [this](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f)
+It should feel less like a [jungle](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f)
+Its like trying to fit a square into a circle hole, and invading our platform. Have you looked at the output of a compiled file? It's much larger then if you had written it yourself.
+
+[you might not need typescript](https://medium.com/javascript-scene/you-might-not-need-typescript-or-static-types-aa7cb670a77b) - by Eric Elliott
 
 #### How then?
 
 It's still fine to use `d.ts` files to help with IDE.<br>
-You can also use jsDoc comment annotation like so:
+You can also use jsDoc comment annotation, default params like so:
 
 ```js
 /**
@@ -431,7 +435,7 @@ function captureFrame (video) {...}
 using jsDoc you would be able to take full advantage of closure-compiler advanced optimizations also
 
 Hold your horses and wait until Static Typing becomes a real thing: https://github.com/sirisian/ecmascript-types
-It's not fun to transpile your existing ts/flow back to js when it lands. so use jsDoc & `d.ts` for now.
+It's not fun to transpile your existing ts/flow back to js when it lands. So use jsDoc & `d.ts` for now.
 
 ## Don't use cancelable promises
 
