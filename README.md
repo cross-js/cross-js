@@ -197,6 +197,7 @@ So you could just do this hack to transform a blob into a stream:
 
 ```js
 const iterable = new Response(blob).body
+const iterable = blob.stream() // (chrome v76)
 // you don't create a stream yourself, you merely just transform a blob into an iterable stream ;)
 // a stream that has Symbol.asyncIterator
 ```
