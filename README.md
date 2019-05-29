@@ -338,7 +338,7 @@ Foo.prototype.update = function update (state) {
 
 // ✓ ok
 if (typeof requestIdleCallback === 'function') {
-  Foo.prototype.update = function idleUpdate() {
+  Foo.prototype.update = function idleUpdate(state) {
     requestIdleCallback(() => { this.updateState(state) })
   }
 } else {
