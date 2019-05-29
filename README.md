@@ -261,7 +261,7 @@ const { Headers, Response, Request } = fetch // browser exclude
 
 - The [WHATWG URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) Standard uses a more selective and fine grained approach to selecting encoded characters than that used by the Legacy API.
 - WHATWG URL and URLSearchParams is available in both context
-- querystring will mix the value between string and arrays giving you an inconsistent api
+- querystring will mix the value between string and arrays giving you an inconsistent api (see parse example below)
 
 #### How then?
 
