@@ -338,7 +338,7 @@ Foo.prototype.update = function update (state) {
 
 // ✓ ok
 if (typeof requestIdleCallback === 'function') {
-  Foo.prototype.update = function idleUpdate(state) {
+  Foo.prototype.update = function update (state) {
     requestIdleCallback(() => { this.updateState(state) })
   }
 } else {
@@ -437,6 +437,7 @@ function captureFrame (video) {...}
 
 (Look github parse this so well with syntax color ☺️)<br>
 using jsDoc you would be able to take full advantage of closure-compiler advanced optimizations also
+The doc annotations works well with visual studio code also
 
 Hold your horses and wait until Static Typing becomes a real thing: https://github.com/sirisian/ecmascript-types
 It's not fun to transpile your existing ts/flow back to js when it lands. So use jsDoc & `d.ts` for now.
