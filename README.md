@@ -144,8 +144,11 @@ fr.readAsArrayBuffer(blob)
 // I usually solve this by doing something like:
 var arrayBuffer = await new Response(blob).arrayBuffer()
 var json = await new Response(blob).json()
-var iterable = new Response(blob).body.getReader()
+var iterable = new Response(blob).body
 var text = await new Response(blob).text()
+
+// Worth mentioning that blob now has new methods blob.text(), blob.arrayBuffer() & blob.stream()
+// First two returns a promise
 ```
 
 When a application knows what callback functions you have registered then there is no need for the application to compute and dispatch all events that nobody have subscribed to. The FileReader dispatch a progress and a loadend event that I'm not even subscribed onto.
