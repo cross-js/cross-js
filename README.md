@@ -240,7 +240,7 @@ Use [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Node-F
 
 #### Why?
 
-The idea here is to keep the bundle size small, and make less JIT compilation. The server only has to download and compile `node-fetch` once
+The idea here is to keep the bundle size small, and make less JIT compilation. Node servers only has to download and compile `node-fetch` once. [Deno](https://deno.land) also has fetch built right in, so no extra dependency is needed.
 
 #### How then?
 
