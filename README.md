@@ -234,6 +234,32 @@ if (!ReadableStream.prototype[Symbol.asyncIterator]) {
 }
 ```
 
+I think that your lower level api should be a (async)Iterator and provided to the user as is. If the user then wants to pipe it and do stuff with it then they could use either [nodes](https://nodejs.org/api/stream.html#stream_stream_readable_from_iterable_options) or [WHATWG upcomming](https://github.com/whatwg/streams/issues/1018) stream.from(iterable). It's also a good way to convert whatwg & node streams to one or the other (since both are @@asyncIterable) but noed stream should be avoided in a browser context and vise versa in the first place. 
+```js
+// should be left out of a lib and be used by the developer themself.
+ReadableStream.from(iterable || node_stream || whatwg_stream)
+  .pipeThrough(new TextEncoderStream()) // convert text to uint8arrays
+  .pipeThrough(new CompressionStream('gzip')) // compress bytes to gzip
+  .pipeTo(destination)
+  .then(done, fail)
+```
+
+if you want to support Deno and other developers then you don't want the lib to deal with much File or Network related stuff to avoid prompting for permission. it feels more safer to provide data to a third party package transformer. doing so will also mean that the end bundle will be smaller since it don't need node, deno or browser specifics to work
+
+```js
+// node developer
+iterable = fs.createReadStream(file)
+stream = Stream.from(csv_to_json(iterable))
+stream.pipe(fs.createWriteStream(json))
+
+// browser developer
+iterable = input.files[0].stream()
+stream = ReadableStream.from(csv_to_json(iterable))
+cache = await caches.open('file_storage')
+cache.put(filename, stream)
+```
+a 3th party package shouldn't have to deal much with node or browser specific stuff at all.
+
 ## Don't use any ajax/request library
 
 Use [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Node-Fetch](https://www.npmjs.com/package/node-fetch), [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch), or [fetch-ponyfill](https://github.com/qubyte/fetch-ponyfill)
