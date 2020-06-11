@@ -30,6 +30,7 @@ If you follow this rule you might be able to write code with just a fraction of 
 - [Don't use inherits](https://github.com/cross-js/cross-js#dont-use-inherits)
 - [Don't use if-else platform specific code inside functions](https://github.com/cross-js/cross-js#dont-use-if-else-platform-specific-inside-functions)
 - [Don't depend of things that would make your application crash in another context](https://github.com/cross-js/cross-js#dont-depend-of-things-that-would-make-your-application-crash-in-another-context)
+- [Don't use extensionless import](https://github.com/cross-js/cross-js#dont-use-extensionless-import)
 - [Don't use anything else then javascript](https://github.com/cross-js/cross-js#dont-use-anything-else-then-javascript)
 - [Don't use cancelable promises](https://github.com/cross-js/cross-js#dont-use-cancelable-promises)
 
@@ -424,6 +425,25 @@ function rotateFrame (img, cb) {...}
 module.exports = { captureFrame, rotateFrame }
 ```
 
+### Don't use extensionless import
+
+...or importing a index file with `./`
+
+#### Why?
+
+Browser can't just guess that it should fetch a resource that ends with `.js` or `index.js`
+it creates more burden on the compiler and it don't work with ESM
+
+```js
+// ✗ avoid
+import foo from './foo'
+import index from './'
+
+// ✓ ok
+import foo from './foo.js'
+import index from './index.js'
+```
+
 ### Don't use anything else then javascript
 
 ...such as PureScript, TypeScript, LiveScript or CoffeeScript that isn't able to run on any platform without beeing transpiled to javascript first
@@ -440,7 +460,7 @@ The point is that:
 - You need to educate developers to properly use other language other then what was built for the platform, while at the same time you need to know a bit of javascript to know what is going on
 
 ```js
-import x from 'module/foo'
+import x from 'module/foo.js'
 ```
 
 It should feel less like a [jungle](https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f)
