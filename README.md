@@ -21,6 +21,7 @@ If you follow this rule you might be able to write code with just a fraction of 
 
 # CrossJS — The Rules
 
+- [Don't use fs](https://github.com/cross-js/cross-js#dont-use-fs)
 - [Don't use Buffer](https://github.com/cross-js/cross-js#dont-use-buffer)
 - [Don't use EventEmitter or EventTarget](https://github.com/cross-js/cross-js#dont-use-eventemitter-or-eventtarget)
 - [Don't create Node or Web readable Stream yourself](https://github.com/cross-js/cross-js#dont-create-node-or-web-readable-stream-yourself)
@@ -33,6 +34,32 @@ If you follow this rule you might be able to write code with just a fraction of 
 - [Don't use extensionless import](https://github.com/cross-js/cross-js#dont-use-extensionless-import)
 - [Don't use anything else then javascript](https://github.com/cross-js/cross-js#dont-use-anything-else-then-javascript)
 - [Don't use cancelable promises](https://github.com/cross-js/cross-js#dont-use-cancelable-promises)
+
+## Don't use fs
+
+... or the [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
+
+#### Why?
+To understand the concept of writing cross platform application then you must understanding the [onion architecture](https://codeguru.com/csharp/csharp/cs_misc/designtechniques/understanding-onion-architecture.html).
+Try to develop your package with as little dependencies or knowledge of the platform you are running your code on, try to think as if your module is running on a sandboxed enviorment (or web worker) with no filesystem or network access, or no access to node or browser api's.
+The core layer of your application should be like a stdin and stdout. How the consumer read and save data should be entire up to the the developers using your package.
+[Deno](https://deno.land/) require modules to ask for permission to use fs/net. It feels more safe to provide data to a third party package that dose the transformation for you and gives you data back then giving it access to read/write to a hole folder.
+
+Here is a senario: Say you have develop a tool that can encode/decode csv data to/from json. For it to work in node, deno and browser. Then it should not be responsible for reading and saving files. The input data can come from many sources such as network, blob, fs, web socket and the output can have many destinations as well
+
+```js
+// A node developer would use it like this
+asyncReadIterator = fs.createReadStream(file)
+asyncJsonIterator = csv_to_json(asyncReadIterator)
+
+for await (let row of asyncJsonIterator) http.request(row.url)
+
+// A browser developer would use it like this
+asyncReadIterator = blob.stream()
+asyncJsonIterator = csv_to_json(asyncReadIterator)
+
+for await (let row of asyncJsonIterator) await fetch(row.url)
+```
 
 ## Don't use Buffer
 
@@ -244,22 +271,6 @@ ReadableStream.from(iterable || node_stream || whatwg_stream)
   .pipeTo(destination)
   .then(done, fail)
 ```
-
-if you want to support Deno and other developers then you don't want the lib to deal with much File or Network related stuff to avoid prompting for permission. it feels more safer to provide data to a third party package transformer. doing so will also mean that the end bundle will be smaller since it don't need node, deno or browser specifics to work
-
-```js
-// node developer
-iterable = fs.createReadStream(file)
-stream = Stream.from(csv_to_json(iterable))
-stream.pipe(fs.createWriteStream(json))
-
-// browser developer
-iterable = input.files[0].stream()
-stream = ReadableStream.from(csv_to_json(iterable))
-cache = await caches.open('file_storage')
-cache.put(filename, stream)
-```
-a 3th party package shouldn't have to deal much with node or browser specific stuff at all.
 
 ## Don't use any ajax/request library
 
