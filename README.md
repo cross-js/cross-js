@@ -101,19 +101,21 @@ var chunk = new Uint8Array(arrayBuffer)
 
 #### Why?
 
-Don't take this seriously, sometimes it can be good to have more then one listener of one type registered. Also if you need something that can bubble up & down. IMHO I think that using events will increase the complexity of some application. It could certainly be avoided by other means without depending on other modules. In the end it will just increase the bundle size. Use them if it makes sense.
+Don't take this seriously, sometimes it can be good to have more then one listener of one type registered. Also if you need something that can bubble up & down. IMHO I think that using events can increase the complexity of some application. It could certainly be avoided by other means without depending on other modules. In the end it will just increase the bundle size. Use them if it makes sense.
 
 All I'm saying is:<br>
 Think twice before you decide to use them and if you really need it.<br>
 There is more than one way to skin a cat<br>
 
-- Including [event](https://nodejs.org/api/events.html) comes with a bundle cost.
+- Including [EventEmitter](https://nodejs.org/api/events.html) comes with a bundle cost.
 - Having EventEmitter and EventTarget gives a mixed api and have no uniformed api across Node and Browsers.
 - Extending EventTarget is not so cross browser compatible either yet.
   - So you have to include a polyfill for this also.
 - Also, how often do you need to subscribe to some event more than twice?
 
 Often you know all the event you want to subscribe to beforehand, so why not just pass those down in the constructor or the function instead
+
+**Update** NodeJS have introduced EventTarget and if you choose to use some kind of event handeling then I would suggest that you use EventTarget instead of EventEmitter, one new cool thing about EventTarget is that you can use AbortSignal (now also introduced to NodeJS core) as a way to also stop listening to multiple events as you call `abortController.abort()`
 
 #### How then?
 
