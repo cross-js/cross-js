@@ -61,6 +61,8 @@ asyncJsonIterator = csv_to_json(asyncReadIterator)
 for await (let row of asyncJsonIterator) await fetch(row.url)
 ```
 
+Only the end developer that is on the top of the architec and sitting in just one enviroment is allowed to use fs but as soon as you start to allow someone else to use your package or it starts to be cross platform compatible then it should be forbidden.
+
 ## Don't use Buffer
 
 #### Why?
