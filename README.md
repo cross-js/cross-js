@@ -298,6 +298,8 @@ const fetch = require('node-fetch') // browser exclude
 const { Headers, Response, Request } = fetch // browser exclude
 ```
 
+Something even better if you apply the _onion architecture_ from the "Don't use the fs" rule
+
 ## Don't use node's [Url](https://nodejs.org/api/url.html#url_legacy_url_api) or [querystring](https://nodejs.org/api/querystring.html)
 
 #### Why?
