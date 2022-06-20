@@ -103,6 +103,8 @@ var chunk = new Uint8Array(arrayBuffer)
 
 #### Why?
 
+**UPDATE:** EventTarget have been added to NodeJS and that is now best considered, it have `once`, and `signal` support also and works in deno, node and browsers, `addEventListener(name, fn, {signal, once: true})`
+
 Don't take this seriously, sometimes it can be good to have more then one listener of one type registered. Also if you need something that can bubble up & down. IMHO I think that using events can increase the complexity of some application. It could certainly be avoided by other means without depending on other modules. In the end it will just increase the bundle size. Use them if it makes sense.
 
 All I'm saying is:<br>
@@ -123,7 +125,7 @@ Often you know all the event you want to subscribe to beforehand, so why not jus
 
 ```js
 // ✗ avoid
-const EventEmitter = require('event')
+import EventEmitter from 'node:event'
 class Foo extends EventEmitter {}
 class Bar extends EventTarget {}
 
@@ -195,12 +197,14 @@ When a application knows what callback functions you have registered then there 
 
 #### How then?
 
+**Update:** node v18 now have whatwg streams built in, but browser still lacks some functionallity.
+
 Use iterator and/or asyncIterator.<br>
 That are the minimum you will need to be able to create a producer and a consumer that can be both readable and writable
 
 ```js
 // ✗ avoid
-const stream = require('readable-stream')
+import stream from 'readable-stream'
 new ReadableStream({...})
 new stream.Readable({...})
 
@@ -278,26 +282,28 @@ ReadableStream.from(iterable || node_stream || whatwg_stream)
 
 ## Don't use any ajax/request library
 
+**Update** NodeJS v18 have fetch built in, use it instead.
+
 Use [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Node-Fetch](https://www.npmjs.com/package/node-fetch), [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch), or [fetch-ponyfill](https://github.com/qubyte/fetch-ponyfill)
 
 #### Why?
 
-The idea here is to keep the bundle size small, and make less JIT compilation. Node servers only has to download and compile `node-fetch` once. [Deno](https://deno.land) also has fetch built right in, so no extra dependency is needed.
+The idea here is to keep the bundle size small, and make less JIT compilation. Node servers only has to download and compile `node-fetch` once. [Deno](https://deno.land) also has fetch built right in, so no extra dependency is needed there. and also web workers don't have XMLHttpRequest, only fetch is supported so axios don't even work in web workers
 
 #### How then?
 
 ```js
 // ✗ avoid
-const http = require('http')
-const https = require('https')
-const request = require('request')
-const axios = require('axios')
-const superagent = require('superagent')
+import http from 'node:http'
+import https from 'node:https'
+import request from 'request'
+import axios from 'axios'
+import superagent from 'superagent'
 const ajax = jQuery.ajax
 
 // ✓ ok
-const fetch = require('node-fetch') // browser exclude
-const { Headers, Response, Request } = fetch // browser exclude
+import fetch, { Headers, Response, Request } from 'node-fetch' // browser exclude
+globalThis.fetch // requires node v18
 ```
 
 Something even better if you apply the _onion architecture_ from the "Don't use the fs" rule
@@ -314,17 +320,14 @@ Something even better if you apply the _onion architecture_ from the "Don't use 
 
 ```js
 // ✗ avoid
-const URL = require('whatwg-url')
-const URLSearchParams = require('url-search-params')
-const querystring = require('querystring')
-const url = require('url').Url
-const parsed = url.parse(source)
+import URL from 'whatwg-url'
+import URLSearchParams from 'url-search-params'
+import querystring from 'node:querystring'
+import Url from 'node:url'
+const parsed = Url.parse(source)
 const obj = querystring.parse('a=a&abc=x&abc=y') // { a: 'a', abc: ['x', 'y'] }
 
 // ✓ ok
-const { URL, URLSearchParams } = require('url') // browser exclude
-
-// in Node v10.0.0 this is available on the global scope
 const parsed = new URL(source)
 const params = new URLSearchParams(source)
 ```
@@ -339,10 +342,10 @@ const params = new URLSearchParams(source)
 
 ```js
 // ✗ avoid
-const stringDecoder = require('string_decoder')
+import stringDecoder from 'string_decoder'
 
 // ✓ ok
-const { TextDecoder, TextEncoder } = require('util') // browser exclude
+const { TextDecoder, TextEncoder } = globalThis
 ```
 
 ## Don't use [inherits](https://nodejs.org/docs/latest/api/util.html#util_util_inherits_constructor_superconstructor)
@@ -355,8 +358,8 @@ You can accomplish the same thing with class extends
 
 ```js
 // ✗ avoid
-const inherits = require('util').inherits
-const inherits = require('inherits')
+import { inherits } from 'node:util'
+import inherits from 'inherits'
 
 // ✓ ok
 class Foo extends Something {}
@@ -408,8 +411,8 @@ node utils.js
 ```
 
 ```html
-<script src="utils.js"></script>
-<script>new Worker('utils.js')</script>
+<script type="module" src="utils.js"></script>
+<script>new Worker('utils.js', { type: 'module' })</script>
 ```
 
 ```js
@@ -467,6 +470,8 @@ import index from './index.js'
 
 #### Why?
 
+Read my other article on why [You might not need TypeScript](https://jimmywarting.github.io/you-might-not-need-typescript/)
+
 The point is that:
 
 - It should just work without any transpilation
@@ -522,7 +527,7 @@ import * from 'promise-cancelable'
 // ✓ ok
 const controller = new AbortController();
 const signal = controller.signal;
-fetch(url, {signal})
+fetch(url, { signal })
 // Later
 controller.abort();
 ```
