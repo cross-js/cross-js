@@ -306,7 +306,7 @@ import fetch, { Headers, Response, Request } from 'node-fetch' // browser exclud
 globalThis.fetch // requires node v18
 ```
 
-Something even better if you apply the _onion architecture_ from the "Don't use the fs" rule
+Something even better if you apply the _onion architecture_ from the "Don't use the fs" rule section. Don't make the actuall request. just construct a Request like object and pass it back to the developer so he/she can modify/make the request itself so i can use whatever http library I want. think of it as not having any access to network request
 
 ## Don't use node's [Url](https://nodejs.org/api/url.html#url_legacy_url_api) or [querystring](https://nodejs.org/api/querystring.html)
 
