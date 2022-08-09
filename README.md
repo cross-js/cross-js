@@ -1,10 +1,10 @@
 # Why should I use CrossJS style guide?
 
-Adopting CrossJS style means your javascript can work in any environment without being dependent on any core browser/node js api and can work in any context just as it's without increasing the bundled size to much. This might not make sense for 100% of projects and development cultures. This rules certainly don't apply if you are only targeting one platform that has the api built in.
+Adopting the CrossJS style means your JavaScript can work in any environment without being dependent on any core browser/node JS API and can work in any context, without unnecessarily increasing the bundle size. This might not make sense for all projects and development cultures. These rules certainly don't apply if you are only targeting one platform that has the API built in, but it makes sense for single modules.
 
 # For References
 
-By only including [readable-stream](https://www.npmjs.com/package/readable-stream) for browser without anything else you have included the buffer, events, string_decoder and inherits module among many more smaller modules and already broken 4 of this rules and increased your bundle to:
+By only including [readable-stream](https://www.npmjs.com/package/readable-stream) in browser without anything else you have included buffer, events, string_decoder and inherits modules among many more smaller modules and already broke 4 of these rules and increased your bundle to:
 
 |                | gzip    | uncompressed |
 | -------------- | ------- | ------------ |
@@ -16,7 +16,7 @@ By only including [readable-stream](https://www.npmjs.com/package/readable-strea
 - [JavaScript Bootup Time Is Too High](https://developers.google.com/web/tools/lighthouse/audits/bootup)
 - [JavaScript Start-up Optimization](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/javascript-startup-optimization/)
 
-Summary: Javascript is now the highest performance hit on many websites... One large image is able to load faster than js. I also recommend that you try out [lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk) and perform a performance test.
+Summary: Javascript is now the highest performance hit on many websites... One large image is able to load faster than JS. I also recommend that you try out [lighthouse](https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk) and perform a performance test.
 If you follow this rule you might be able to write code with just a fraction of what you otherwise would need.
 
 # CrossJS — The Rules
@@ -41,11 +41,11 @@ If you follow this rule you might be able to write code with just a fraction of 
 
 #### Why?
 To understand the concept of writing cross platform application then you must understanding the [onion architecture](https://codeguru.com/csharp/csharp/cs_misc/designtechniques/understanding-onion-architecture.html).
-Try to develop your package with as little dependencies or knowledge of the platform you are running your code on, try to think as if your module is running on a sandboxed enviorment (or web worker) with no filesystem or network access, or no access to node or browser api's.
-The core layer of your application should be like a stdin and stdout. How the consumer read and save data should be entire up to the the developers using your package.
-[Deno](https://deno.land/) require modules to ask for permission to use fs/net. It feels more safe to provide data to a third party package that dose the transformation for you and gives you data back then giving it access to read/write to a hole folder.
+Try to develop your package with as little dependencies or knowledge of the platform you are running your code on, try to think as if your module was running on a sandboxed enviorment (or web worker) with no filesystem or network access, or no access to node or browser API's.
+The core layer of your application should be like a stdin and stdout. How the consumer reads and saves data should be entirely up to the the developers using your package.
+[Deno](https://deno.land/) requires modules to ask for permission to use fs/net. It feels safer to provide data to a third party package that does the transformation for you and gives you data back, rather than giving it read/write permissions to an entire folder.
 
-Here is a senario: Say you have develop a tool that can encode/decode csv data to/from json. For it to work in node, deno and browser. Then it should not be responsible for reading and saving files. The input data can come from many sources such as network, blob, fs, web socket and the output can have many destinations as well
+Here is a senario: Say you have developed a tool that can encode/decode csv data to/from json. For it to work in node, deno and browser, it shouldn't be responsible for reading and saving files. The input data can come from many sources such as network, blob, fs, web socket and the output can have many destinations as well:
 
 ```js
 // A node developer would use it like this
@@ -61,17 +61,17 @@ asyncJsonIterator = csv_to_json(asyncReadIterator)
 for await (let row of asyncJsonIterator) await fetch(row.url)
 ```
 
-Only the end developer that is on the top of the architec and sitting in just one enviroment is allowed to use fs but as soon as you start to allow someone else to use your package or it starts to be cross platform compatible then it should be forbidden.
+Only the end developer that is on the top of the onion structure and sitting in just one enviroment is allowed to use fs, but as soon as you allow someone else to use your package or it starts to be cross platform compatible, then it should be forbidden.
 
 ## Don't use Buffer
 
 #### Why?
 
-`Uint8Array` and `Buffer` have very much in common and are very similar to each other.
+`Uint8Array` and `Buffer` have a lot in common and are very similar to each other.
 Adding `buffer` will increase your bundle size a lot. And the fact that buffer inherits from
-`Uint8Array` have made recent Node.js core api's acceptable to typed arrays. For example: `fs.writeFile()` used to only accept a Buffer but now works with both typed arrays and buffers.
+`Uint8Array` have made recent Node.js core API's accept typed arrays. For example: `fs.writeFile()` used to only accept a Buffer but now works with both typed arrays and buffers.
 
-Following this rule doesn't mean you have to convert all buffers you receive from node's core api and other modules from buffer to UInt8Array, just treat the buffer as a Uint8array instead since buffer inherits from it.
+Following this rule doesn't mean you have to convert all buffers you receive from node's core API and other modules from buffer to UInt8Array, just treat the buffer as a Uint8Array instead since buffer inherits from it.
 
 #### How then?
 
@@ -79,31 +79,31 @@ Use [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Referen
 
 ```js
 // ✗ avoid
-var chunk = Buffer.from(source)
-var chunk = Buffer.alloc(n)
-var chunk = Buffer.allocUnsafe(n)
-var chunk = new Buffer(source)
+const chunk = Buffer.from(source)
+const chunk = Buffer.alloc(n)
+const chunk = Buffer.allocUnsafe(n)
+const chunk = new Buffer(source)
 
 // ✓ ok
 // Buffer allocation
-var chunk = new Uint8Array(n)
+const chunk = new Uint8Array(n)
 
 // Buffer from An array-like or iterable object to convert to a typed array.
-var chunk = Uint8Array.from(source[, mapFn[, thisArg]])
+const chunk = Uint8Array.from(source[, mapFn[, thisArg]])
 
 // Buffer from string
-var chunk = new TextEncoder().encode('abc')
+const chunk = new TextEncoder().encode('abc')
 
 // Buffer from base64 (minimalist, there are synchronous way to, try avoiding base64 in the first place)
-var arrayBuffer = await fetch(`data:;base64,${string}`).then(r => r.arrayBuffer())
-var chunk = new Uint8Array(arrayBuffer)
+const arrayBuffer = await fetch(`data:;base64,${string}`).then(r => r.arrayBuffer())
+const chunk = new Uint8Array(arrayBuffer)
 ```
 
-## Don't use [EventEmitter](https://nodejs.org/api/events.html) or [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)
+## Don't use [EventEmitter](https://nodejs.org/api/events.html)
 
 #### Why?
 
-**UPDATE:** EventTarget have been added to NodeJS and that is now best considered, it have `once`, and `signal` support also and works in deno, node and browsers, `addEventListener(name, fn, {signal, once: true})`
+**UPDATE:** EventTarget have been added to NodeJS and that is now considered best, it has `once`, and `signal` support also and works in deno, node and browsers, `addEventListener(name, fn, {signal, once: true})`
 
 Don't take this seriously, sometimes it can be good to have more then one listener of one type registered. Also if you need something that can bubble up & down. IMHO I think that using events can increase the complexity of some application. It could certainly be avoided by other means without depending on other modules. In the end it will just increase the bundle size. Use them if it makes sense.
 
@@ -112,9 +112,6 @@ Think twice before you decide to use them and if you really need it.<br>
 There is more than one way to skin a cat<br>
 
 - Including [EventEmitter](https://nodejs.org/api/events.html) comes with a bundle cost.
-- Having EventEmitter and EventTarget gives a mixed api and have no uniformed api across Node and Browsers.
-- Extending EventTarget is not so cross browser compatible either yet.
-  - So you have to include a polyfill for this also.
 - Also, how often do you need to subscribe to some event more than twice?
 
 Often you know all the event you want to subscribe to beforehand, so why not just pass those down in the constructor or the function instead
@@ -127,7 +124,6 @@ Often you know all the event you want to subscribe to beforehand, so why not jus
 // ✗ avoid
 import EventEmitter from 'node:event'
 class Foo extends EventEmitter {}
-class Bar extends EventTarget {}
 
 source.on(event, fn)
 source.once(event, fn)
@@ -144,6 +140,9 @@ class Foo {
   get onmessage() {...}
   set onmessage(x) {...}
 }
+
+// ✓ ok (extending EventTarget)
+class Bar extends EventTarget {}
 
 // ✓ ok (passing in the events you want to subscribe to)
 class Bar {
@@ -170,22 +169,22 @@ bar.opts.onData = null
 
 // Another example when reading a file / blob
 // How often do you need to listen to this events more then twice?
-var fr = new FileReader()
+const fr = new FileReader()
 fr.addEventListener('load', function (evt) {...})
 fr.addEventListener('error', function (evt) {...})
 fr.readAsArrayBuffer(blob)
 
 // I usually solve this by doing something like:
-var arrayBuffer = await new Response(blob).arrayBuffer()
-var json = await new Response(blob).json()
-var iterable = new Response(blob).body
-var text = await new Response(blob).text()
+const arrayBuffer = await new Response(blob).arrayBuffer()
+const json = await new Response(blob).json()
+const iterable = new Response(blob).body
+const text = await new Response(blob).text()
 
 // Worth mentioning that blob now has new methods blob.text(), blob.arrayBuffer() & blob.stream()
 // First two returns a promise
 ```
 
-When a application knows what callback functions you have registered then there is no need for the application to compute and dispatch all events that nobody have subscribed to. The FileReader dispatch a progress and a loadend event that I'm not even subscribed onto.
+When a application knows what callback functions you have registered then there is no need for the application to compute and dispatch all events that nobody has subscribed to. The FileReader dispatches a progress and a loadend event that I'm not even subscribed to.
 
 ## Don't create Node or Web readable Stream yourself.
 
@@ -197,10 +196,10 @@ When a application knows what callback functions you have registered then there 
 
 #### How then?
 
-**Update:** node v18 now have whatwg streams built in, but browser still lacks some functionallity.
+**Update:** node v18 now have whatwg streams built in, but they are relatively slow,  browser still lacks some functionallity.
 
 Use iterator and/or asyncIterator.<br>
-That are the minimum you will need to be able to create a producer and a consumer that can be both readable and writable
+Those are the minimum you will need to be able to create a producer and a consumer that can be both read and write.
 
 ```js
 // ✗ avoid
@@ -210,42 +209,40 @@ new stream.Readable({...})
 
 // ✓ ok (create a async iterator that reads a large file/blob in chunks)
 async function* blobToIterator(blob, chunkSize = 8 << 16) { // 0.5 MiB
-  const fr = new FileReader()
   let position = 0
-
-  function read(chunk) {
-    return new Promise(rs => {
-      fr.onload = () => rs(new Uint8Array(fr.result))
-      fr.readAsArrayBuffer(chunk)
-    })
-  }
   
   while (true) {
     const chunk = blob.slice(position, (position = position + chunkSize))
     if (!chunk.size) return
-    yield await read(chunk)
+    yield await chunk.arrayBuffer()
   }
 }
 
 const iterable = blobToIterator(new Blob(['123']))
+
+// ✓ ok (convert a blob to a stream and read its iterator)
+const stream = blob.stream()
+const iterable = stream[Symbol.asyncIterator]()
 ```
 
-There is no problem returning or consumeing a stream you get from example `Response.body` or `fs.createReadStream()` you can pass this stream around how much you like. Node streams have a `Symbol.asyncIterator` in the prototype and (web streams will eventually have them as well) you can add the symbol to your class also to make it a bit nicer
+There is no problem returning or consuming a stream you get from example `Response.body` or `fs.createReadStream()` you can pass this stream around how much you like. Node streams have a `Symbol.asyncIterator` in the prototype and (web streams will eventually have them as well) you can add the symbol to your class also to make it a bit nicer
 
 So you could just do this hack to transform a blob into a stream:
 
 ```js
+// ✓ ok
 const iterable = new Response(blob).body
+// ✓ ok
 const iterable = blob.stream() // (chrome v76)
 // you don't create a stream yourself, you merely just transform a blob into an iterable stream ;)
 // a stream that has Symbol.asyncIterator
 ```
 
 Then you can consume, pause, resume and pipe the iterator & streams (thanks due to Symbol.asyncIterator)
-All you need to do now is
+All you need to do now is:
 
 ```js
-async function* transform() {
+async function* transform(iterable) {
   for await (chunk of iterable) {
     yield do_transformation(chunk)
   }
@@ -258,19 +255,36 @@ iterator = transform(get_iterable())
 To make web streams iterable, you could use something like this:
 
 ```js
-if (!ReadableStream.prototype[Symbol.asyncIterator]) {
-  ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
+import 'fast-readable-async-iterator'
+
+// or
+
+if (typeof ReadableStream !== 'undefined' && !ReadableStream.prototype[Symbol.asyncIterator]) {
+  ReadableStream.prototype[Symbol.asyncIterator] = function () {
     const reader = this.getReader()
-    while (1) {
-      const chunk = await reader.read()
-      if (chunk.done) return chunk.value
-      yield chunk.value
+    let last = reader.read()
+    return {
+      next () {
+        const temp = last
+        last = reader.read()
+        return temp
+      },
+      return () {
+        return reader.releaseLock()
+      },
+      throw (err) {
+        this.return()
+        throw err
+      },
+      [Symbol.asyncIterator] () {
+        return this
+      }
     }
   }
 }
 ```
 
-I think that your lower level api should be a (async)Iterator and provided to the user as is. If the user then wants to pipe it and do stuff with it then they could use either [nodes](https://nodejs.org/api/stream.html#stream_stream_readable_from_iterable_options) or [WHATWG upcomming](https://github.com/whatwg/streams/issues/1018) stream.from(iterable). It's also a good way to convert whatwg & node streams to one or the other (since both are @@asyncIterable) but noed stream should be avoided in a browser context and vise versa in the first place. 
+I think that your lower level api should be an (async)Iterator and provided to the user as is. If the user then wants to pipe it and do stuff with it then they could use either [nodes](https://nodejs.org/api/stream.html#stream_stream_readable_from_iterable_options) or [WHATWG upcomming](https://github.com/whatwg/streams/issues/1018) stream.from(iterable). It's also a good way to convert whatwg & node streams to one or the other (since both are @@asyncIterable) but noed stream should be avoided in a browser context and vise versa in the first place. 
 ```js
 // should be left out of a lib and be used by the developer themself.
 ReadableStream.from(iterable || node_stream || whatwg_stream)
@@ -278,17 +292,22 @@ ReadableStream.from(iterable || node_stream || whatwg_stream)
   .pipeThrough(new CompressionStream('gzip')) // compress bytes to gzip
   .pipeTo(destination)
   .then(done, fail)
+
+// or in node
+import { Readable } from 'streamx'
+
+const stream = Readable.from(iterable || node_stream || whatwg_stream)
 ```
 
 ## Don't use any ajax/request library
 
-**Update** NodeJS v18 have fetch built in, use it instead.
+**Update** NodeJS v18 has fetch built in, use it instead.
 
 Use [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [Node-Fetch](https://www.npmjs.com/package/node-fetch), [isomorphic-fetch](https://www.npmjs.com/package/isomorphic-fetch), or [fetch-ponyfill](https://github.com/qubyte/fetch-ponyfill)
 
 #### Why?
 
-The idea here is to keep the bundle size small, and make less JIT compilation. Node servers only has to download and compile `node-fetch` once. [Deno](https://deno.land) also has fetch built right in, so no extra dependency is needed there. and also web workers don't have XMLHttpRequest, only fetch is supported so axios don't even work in web workers
+The idea here is to keep the bundle size small, and use less JIT compilation. Node servers only have to download and compile `node-fetch` once. [Deno](https://deno.land) also has fetch built right in, so no extra dependency is needed there, web workers don't have XMLHttpRequest, only fetch is supported so axios won't even work in web workers
 
 #### How then?
 
@@ -306,14 +325,14 @@ import fetch, { Headers, Response, Request } from 'node-fetch' // browser exclud
 globalThis.fetch // requires node v18
 ```
 
-Something even better if you apply the _onion architecture_ from the "Don't use the fs" rule section. Don't make the actuall request. just construct a Request like object and pass it back to the developer so he/she can modify/make the request itself so i can use whatever http library I want. think of it as not having any access to network request
+Something even better if you apply the _onion architecture_ from the "Don't use the fs" rule section. Don't make the actual request. Instead construct a Request like object and pass it back to the developer so he/she can modify/make the request itself so i can use whatever http library they want. Think of it as not having any access to network request.
 
 ## Don't use node's [Url](https://nodejs.org/api/url.html#url_legacy_url_api) or [querystring](https://nodejs.org/api/querystring.html)
 
 #### Why?
 
 - The [WHATWG URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) Standard uses a more selective and fine grained approach to selecting encoded characters than that used by the Legacy API.
-- WHATWG URL and URLSearchParams is available in both context
+- WHATWG URL and URLSearchParams is available in all contexts
 - querystring will mix the value between string and arrays giving you an inconsistent api (see parse example below)
 
 #### How then?
@@ -397,9 +416,14 @@ if (typeof requestIdleCallback === 'function') {
 
 #### Why?
 
-So it works everywhere.<br>
-Others are going to want to use your module but they may also use code testing/coverage inside NodeJS.<br>
-Or for some reason import your script to a web worker without using it<br>
+So it works everywhere.
+
+Others are going to want to use your module but they may also use code testing/coverage inside NodeJS.
+
+A good example of this is the ReadableStream asyncIterator polyfill shown above.
+
+Or for some reason import your script to a web worker without using it.
+
 Your script doesn't have to be fully functional, you can still write code that depends on the DOM or using the location to redirect to another page or use any node specific code like `process.nextTick`. Even if you write a module that is targeted for only the browser.
 
 #### How then?
@@ -425,9 +449,11 @@ const canvas = document.createElement('canvas')
 const ctx = canvas.getContext('2d')
 
 // ✓ ok
+let canvas
+let ctx
 if (typeof document === 'object') {
-  var canvas = document.createElement('canvas')
-  var ctx = canvas.getContext('2d')
+  canvas = document.createElement('canvas')
+  ctx = canvas.getContext('2d')
 }
 
 /**
@@ -514,7 +540,7 @@ It's not fun to transpile your existing ts/flow back to js when it lands. So use
 
 #### Why?
 
-There is a standard available and it's called [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) it was initially built for aborting a fetch request but they can be used for other things as well. There is polyfill available and you can remove it once it becomes available later on (easier to refactor)
+There is a standard available and it's called [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) it was initially built for aborting a fetch request but they can be used for other things as well. There is a polyfill available and you can remove it once it becomes available later on (easier to refactor)
 
 #### How then?
 
