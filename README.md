@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="./cross-js.svg" alt="logo"  width="300">
+  
+# CrossJs
+</div>
 # Why should I use CrossJS style guide?
 
 Adopting the CrossJS style means your JavaScript can work in any environment without being dependent on any core browser/node JS API and can work in any context, without unnecessarily increasing the bundle size. This might not make sense for all projects and development cultures. These rules certainly don't apply if you are only targeting one platform that has the API built in, but it makes sense for single modules.
