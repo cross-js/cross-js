@@ -219,7 +219,7 @@ async function* blobToIterator(blob, chunkSize = 8 << 16) { // 0.5 MiB
   while (true) {
     const chunk = blob.slice(position, (position = position + chunkSize))
     if (!chunk.size) return
-    yield await chunk.arrayBuffer()
+    yield new Uint8Array(await chunk.arrayBuffer())
   }
 }
 
