@@ -45,7 +45,7 @@ If you follow this rule you might be able to write code with just a fraction of 
 ... or the [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
 
 #### Why?
-To understand the concept of writing cross platform application then you must understanding the [onion architecture]([url](https://web.archive.org/web/20190328210220/https://www.codeguru.com/csharp/csharp/cs_misc/designtechniques/understanding-onion-architecture.html))
+To understand the concept of writing cross platform application then you must understanding the [onion architecture](https://web.archive.org/web/20190328210220/https://www.codeguru.com/csharp/csharp/cs_misc/designtechniques/understanding-onion-architecture.html)
 Try to develop your package with as little dependencies or knowledge of the platform you are running your code on, try to think as if your module was running on a sandboxed enviorment (or web worker) with no filesystem or network access, or no access to node or browser API's.
 The core layer of your application should be like a stdin and stdout. How the consumer reads and saves data should be entirely up to the the developers using your package.
 [Deno](https://deno.land/) requires modules to ask for permission to use fs/net. It feels safer to provide data to a third party package that does the transformation for you and gives you data back, rather than giving it read/write permissions to an entire folder.
